@@ -26,9 +26,8 @@ public class YearSpinnerActivity extends Activity {
     YearsHandler yrHandler = new YearsHandler();
 
     boolean userSelect = false;
-    private String url1 = "https://numbersapi.p.mashape.com/";
-    private String url2= "/year?mashape-key=4U2zJVYcolmshgYM4RCZiw861hoXp1wiaYzjsn9BF1VW7wx349&json=true";
-
+    private String url1 = "https://numbersapi.p.rapidapi.com/";
+    private String url2= "/year?fragment=true&json=true";
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_number_spinner);
@@ -52,7 +51,7 @@ public class YearSpinnerActivity extends Activity {
 
                     new FetchYearFact().execute(item);
 
-                    userSelect = false;
+                    userSelect = true;
                 }
 
             }
@@ -83,8 +82,10 @@ public class YearSpinnerActivity extends Activity {
                 URL url = new URL(url1 + params[0]
                         + url2);
 
-                urlConnection = (HttpURLConnection) url.openConnection();
+               urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("X-RapidAPI-Key","UygwA3LnI1mshAPcqbrTdu6rvUkxp1Kd1q6jsnETjeLq2t3LzS");
+
                 urlConnection.connect();
 
                 InputStream in = urlConnection.getInputStream();
@@ -98,6 +99,7 @@ public class YearSpinnerActivity extends Activity {
 
                 // call a method to parse the json data and return a string.
                yearFact=  yrHandler.getYearFact(yearFactJsonString);
+
 
             }catch(Exception e){
                 Log.e(LOG_TAG,"Error" + e.getMessage());
