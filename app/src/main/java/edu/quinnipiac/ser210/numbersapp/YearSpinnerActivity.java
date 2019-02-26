@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class YearSpinnerActivity extends Activity {
+public class YearSpinnerActivity extends AppCompatActivity {
 
     private final String LOG_TAG = YearSpinnerActivity.class.getSimpleName();
     // Will contain the raw JSON response as a string.
@@ -28,12 +33,36 @@ public class YearSpinnerActivity extends Activity {
     boolean userSelect = false;
     private String url1 = "https://numbersapi.p.rapidapi.com/";
     private String url2= "/year?fragment=true&json=true";
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.action_settings:
+                Toast.makeText(this,"Here are my settings",Toast.LENGTH_SHORT).show();
+                return  true;
+            case R.id.action_fav:
+                Toast.makeText(this,"Here are my fav",Toast.LENGTH_SHORT).show();
+                return  true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_number_spinner);
 
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         ArrayAdapter<String> yearsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,yrHandler.years);
 
@@ -44,7 +73,6 @@ public class YearSpinnerActivity extends Activity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 if (userSelect) {
                     final String item = (String) parent.getItemAtPosition(position);
                     Log.i("onItemSelected :year", item);
@@ -53,16 +81,13 @@ public class YearSpinnerActivity extends Activity {
 
                     userSelect = false;
                 }
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
     }
-
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
