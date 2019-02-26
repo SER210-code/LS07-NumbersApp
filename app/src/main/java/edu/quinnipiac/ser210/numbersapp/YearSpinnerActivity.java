@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,7 @@ public class YearSpinnerActivity extends AppCompatActivity {
     boolean userSelect = false;
     private String url1 = "https://numbersapi.p.rapidapi.com/";
     private String url2= "/year?fragment=true&json=true";
+    private ShareActionProvider provider;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -41,6 +44,9 @@ public class YearSpinnerActivity extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView =
                 (SearchView) searchItem.getActionView();
+        // Get the ActionProvider for later usage
+        MenuItem shareItem =  menu.findItem(R.id.action_share);
+        provider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -55,6 +61,13 @@ public class YearSpinnerActivity extends AppCompatActivity {
             case R.id.action_fav:
                 Toast.makeText(this,"Here are my fav",Toast.LENGTH_SHORT).show();
                 return  true;
+                case R.id.action_share:
+                    // populate the share intent with data
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_TEXT, "This is a message for you");
+                    provider.setShareIntent(intent);
+                    return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
