@@ -137,11 +137,9 @@ public class YearSpinnerActivity extends AppCompatActivity {
                 }
                  reader  = new BufferedReader(new InputStreamReader(in));
                 // call getBufferString to get the string from the buffer.
+                yearFact = getStringFromBuffer(reader);
 
-                String yearFactJsonString = getBufferStringFromBuffer(reader).toString();
 
-                // call a method to parse the json data and return a string.
-               yearFact=  yrHandler.getYearFact(yearFactJsonString);
 
 
             }catch(Exception e){
@@ -175,18 +173,23 @@ public class YearSpinnerActivity extends AppCompatActivity {
 
             }
         }
-        private StringBuffer getBufferStringFromBuffer(BufferedReader br) throws Exception{
+        private String getStringFromBuffer(BufferedReader bufferedReader) throws Exception {
             StringBuffer buffer = new StringBuffer();
-
             String line;
-            while((line = br.readLine()) != null){
+
+            while((line = bufferedReader.readLine()) != null){
                 buffer.append(line + '\n');
+
             }
-
-            if (buffer.length() == 0)
-                return null;
-
-            return buffer;
+            if (bufferedReader !=null){
+                try{
+                    bufferedReader.close();
+                }catch (IOException e){
+                    Log.e("MainActivity","Error" + e.getMessage());
+                    return null;
+                }
+            }
+            return  yrHandler.getYearFact(buffer.toString());
         }
     }
 
